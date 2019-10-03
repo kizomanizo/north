@@ -16,13 +16,14 @@ router.get('/api/v1/', function(_req, res){
     })
 });
 
-router.get('/api/v1/users', middleware.checkToken, function(_req, res){
-    res.status(200).send({
-        message: "All Users list",
-    })
-});
+// router.get('/api/v1/users', middleware.checkToken, function(_req, res){
+//     res.status(200).send({
+//         message: "All Users list",
+//     })
+// });
 
-router.post('/api/v1/users', userController.create);
-router.post('/api/v1/login', userController.login);
+router.post('/api/v1/users', middleware.checkToken, userController.create);
+router.post('/api/v1/users/login', userController.login);
+router.get('/api/v1/users',middleware.checkToken, userController.all);
 
 module.exports = router;
