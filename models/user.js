@@ -1,48 +1,55 @@
 'use strict';
+var bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    // firstname: DataTypes.STRING,
-    // lastname: DataTypes.STRING,
-    // username: DataTypes.STRING,
-    // password: DataTypes.STRING,
-    // salt: DataTypes.STRING,
     uuid: {
-      type: DataTypes.STRING,
-      length: 36,
-      unique: true,
-      defaultValue: DataTypes.UUIDV4
-      },
-    username: {
         type: DataTypes.STRING,
-        length: 60,
+        length: 36,
         unique: true,
-      },
-    password: {
-        type: DataTypes.STRING,
-      },
-    salt: {
-        type: DataTypes.STRING
-      },
+        defaultValue: DataTypes.UUIDV4
+    },
     email: {
         type: DataTypes.STRING,
         validate: {
             isEmail:true,
         }
-      },
+    },
+    password: {
+        type: DataTypes.STRING,
+    },
+    salt: {
+        type: DataTypes.STRING
+    },
     lastlogin: {
         type: DataTypes.DATE
-      },
+    },
     status: {
         type: DataTypes.ENUM,
         values: ['active', 'inactive'],
-        defaultValue: 'active'
-      },
+        defaultValue: 'inactive'
+    },
     created_by: {
         type: DataTypes.INTEGER
-      },
-  }, {});
-  User.associate = function(models) {
+    },
+  },  
+  {
+    hooks: {
+        // This hook hashes the password before saving it, it also saves the salt
+        beforeCreate: async function(user) {
+            const salt = await bcrypt.genSalt(10); //whatever number you want
+            user.salt = salt;
+            user.password = await bcrypt.hash(user.password, salt);
+        }
+    }
+});
+    // Working password hash authenticator
+    User.prototype.validPassword = async function(password) {
+        return await bcrypt.compare(password, this.password);
+    };
+
+    User.associate = function(models) {
     // associations can be defined here
-  };
+    };
+
   return User;
 };

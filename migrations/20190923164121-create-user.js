@@ -14,11 +14,12 @@ module.exports = {
                 unique: true,
                 defaultValue: Sequelize.UUIDV4
             },
-            username: {
+            email: {
                 type: Sequelize.STRING,
-                length: 60,
-                unique: true,
-                allowNull: false
+                validate: {
+                    isEmail:true,
+                    allowNull: false
+              }
             },
             password: {
                 type: Sequelize.STRING,
@@ -26,13 +27,6 @@ module.exports = {
             },
             salt: {
                 type: Sequelize.STRING
-            },
-            email: {
-                type: Sequelize.STRING,
-                validate: {
-                    isEmail:true,
-                    allowNull: false
-              }
             },
             lastlogin: {
                 type: Sequelize.DATE
@@ -51,6 +45,9 @@ module.exports = {
             },
             updatedAt: {
                 allowNull: false,
+                type: Sequelize.DATE
+            },
+            deletedAt: {
                 type: Sequelize.DATE
             }
 
