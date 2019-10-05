@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('Users', {
+        return queryInterface.createTable('Levels', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -14,30 +14,10 @@ module.exports = {
                 unique: true,
                 defaultValue: Sequelize.UUIDV4
             },
-            email: {
-                type: Sequelize.STRING,
-                validate: {
-                    isEmail:true,
-                    allowNull: false
-              }
-            },
-            password: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            salt: {
-                type: Sequelize.STRING
-            },
-            lastlogin: {
-                type: Sequelize.DATE
-            },
-            status: {
+            name: {
                 type: Sequelize.ENUM,
-                values: ['active', 'inactive'],
-                defaultValue: 'active'
-            },
-            created_by: {
-                type: Sequelize.INTEGER
+                values: ['admin', 'chairman', 'member'],
+                defaultValue: 'member'
             },
             createdAt: {
                 allowNull: false,
@@ -50,11 +30,9 @@ module.exports = {
             deletedAt: {
                 type: Sequelize.DATE
             }
-
-          });
+        });
     },
-    
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('Users');
+        return queryInterface.dropTable('Levels');
     }
 };
