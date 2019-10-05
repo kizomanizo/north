@@ -8,24 +8,19 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.UUIDV4
         },
         name: {
-            type: DataTypes.STRING,
-        },
-        status: {
             type: DataTypes.ENUM,
-            values: ['active', 'inactive'],
-            defaultValue: 'active'
+            values: ['admin', 'chairman', 'member'],
+            defaultValue: 'member'
         },
+
         created_by: {
               type: DataTypes.INTEGER
         },
-    }, {
-        
-    });
+    }, {});
     Level.associate = function(models) {
         // Associate Level model with User model
-        Level.belongsToMany(User, {
+        Level.belongsToMany(models.User, {
             through: 'UserLevel',
-            as: 'levels',
             foreignKey: 'levelId',
             otherKey: 'userId',
         });

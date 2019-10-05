@@ -49,9 +49,8 @@ module.exports = (sequelize, DataTypes) => {
 
     User.associate = function(models) {
         // Associate User model with Level model
-        User.belongsToMany(Level, {
+        User.belongsToMany(models.Level, {
             through: 'UserLevel',
-            as: 'users',
             foreignKey: 'userId',
             otherKey: 'levelId',
         });

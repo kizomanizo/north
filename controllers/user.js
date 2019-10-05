@@ -1,4 +1,5 @@
 const User = require('../models').User;
+const Level = require('../models').Level;
 const uuidv4 = require('uuid/v4');
 let jwt = require('jsonwebtoken');
 let variables = require('../config/variables');
@@ -20,8 +21,13 @@ module.exports = {
             email:      req.body.email,
             lastlogin:  Date('Y-m-d'),
             status:     "inactive",
-            created_by: 0,
-        })
+            created_by: req.body.user,
+        }, {
+            include: [{
+              model: Level,
+            }]
+          })
+        // .then(User.setLevels(req.body.level))
         .then(user => res.status(201).send(user))
         .catch(error => res.status(400).send(error));
     },
@@ -40,7 +46,7 @@ module.exports = {
         .catch(error => res.status(400).send(error));
     },
 
-    // Search for a specific user using UUID, for Primary key utumie findByPk(req.params.UserId)
+    // Delete a specific user using UUID, for Primary key utumie findByPk(req.params.UserId)
     delete(req, res) {
       User.findOne({where: {uuid: req.params.UserUuid} })
       .then(user => { return user.destroy()} )
