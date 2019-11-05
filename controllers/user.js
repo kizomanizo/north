@@ -34,15 +34,34 @@ module.exports = {
     
     // Change user's status from beng inactive to being active
     activate(req, res) {
-      User.update({status: "active"}, {where: {uuid: req.params.UserUuid}})
-        .then(user =>  res.status(200).send(user))
+        User.update({status: "active"}, {where: {uuid: req.params.UserUuid}})
+        .then(user =>  res.status(200).send({
+            success: true,
+            message: "Status changed to ACTIVE",
+            entity: user,
+        }))
+        .catch(error => res.status(400).send(error));
+    },
+
+    // Change user's status from beng active to being inactive
+    deactivate(req, res) {
+        User.update({status: "inactive"}, {where: {uuid: req.params.UserUuid}})
+        .then(user =>  res.status(200).send({
+            success: true,
+            message: "Status changed to INACTIVE",
+            entity: user,
+        }))
         .catch(error => res.status(400).send(error));
     },
 
     // Search for a specific user using UUID, for Primary key utumie findByPk(req.params.UserId)
     search(req, res) {
         User.findOne({where: {uuid: req.params.UserUuid} })
-        .then(user =>  res.status(200).send(user))
+        .then(user =>  res.status(200).send({
+            success: true,
+            message: "User found",
+            entity: user,
+        }))
         .catch(error => res.status(400).send(error));
     },
 
@@ -50,7 +69,11 @@ module.exports = {
     delete(req, res) {
       User.findOne({where: {uuid: req.params.UserUuid} })
       .then(user => { return user.destroy()} )
-      .then(user =>  res.status(200).send(user))
+      .then(user =>  res.status(200).send({
+            success: true,
+            message: "User deleted",
+            entity: user,
+    }))
       .catch(error => res.status(400).send(error));
     },
 
