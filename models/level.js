@@ -12,11 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             values: ['admin', 'chairman', 'member'],
             defaultValue: 'member'
         },
-
-        created_by: {
-              type: DataTypes.INTEGER
-        },
-    }, {});
+    });
     Level.associate = function(models) {
         // Associate Level model with User model
         Level.belongsToMany(models.User, {
